@@ -1,0 +1,12 @@
+# feature request  vs tasks to do
+ ✔ basic setup of the repository tree @done (16-05-28 17:50)
+ ☐ add tests
+ ☐ provide a wheel package
+ ☐ write the docstrings for all functions
+ ☐ write a properly readme.md with gifs showing the basic usage
+ ☐ add: processing folder/ csv pair malloc.csv free.csv
+ ☐ add: print alternatively using matplotlib
+ ☐ add: control params:
+   ☐ long size (1s default)
+   ☐ period of number of longs (1000 default)
+ ☐ add suport to save csv
