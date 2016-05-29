@@ -11,6 +11,7 @@ import pandas as pd
 from decorating import animated
 from mreport import MICROSECOND
 
+
 @animated("parsing csv")
 def parse(csvs):
     mallocs = sorted(x for x in csvs if 'malloc' in x)
@@ -64,10 +65,10 @@ def stats(longs, period):
         longs_counter += int(is_long)
     return pd.DataFrame({
         'longs': longs_distribution,
-        'interval': [interval_name(x, period) for x in 
+        'interval': [interval_name(x, period) for x in
                      range(len(longs_distribution))]
     })
 
 
 def interval_name(x, period):
-    return '{} - {}'.format(str(x * period), (x + 1) * period) 
+    return '{} - {}'.format(str(x * period), (x + 1) * period)
