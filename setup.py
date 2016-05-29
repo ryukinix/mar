@@ -24,7 +24,7 @@ with open('requirements.txt') as f:
 setup(
     name=mreport.__name__,
     version=mreport.__version__,
-    description="A useful collection of decorators (focused in animation)",
+    description="A tool stats parser whose report the of dump memory analysis",
     long_description=long_description,
     classifiers=[
         "Environment :: Console",
@@ -38,12 +38,10 @@ setup(
         "Programming Language :: Python :: 3.5",
     ],
     # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-    keywords='mreport animation decorators decorator',
+    keywords='mreport memory analysis pandas table stats',
     author=mreport.__author__,
     author_email=mreport.__email__,
     url=mreport.__url__,
-    download_url="{u}/archive/v{v}.tar.gz".format(u=mreport.__url__,
-                                                  v=mreport.__version__),
     zip_safe=False,
     license='MIT',
     packages=find_packages(exclude=['ez_setup', 'examples',
@@ -52,7 +50,7 @@ setup(
     install_requires=install_requires,
     entry_points={  # no entry-points yet
         'console_scripts': [
-            'memory-analysis-report = mreport.cli:main'
-        ]
+            'mar = mreport.cli:main'
+        ]  # mar -> memory-analysis-report
     },
 )
