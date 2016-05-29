@@ -8,8 +8,10 @@
 #
 
 import os
+from functools import partial
 
 from mreport import CURRENT_DIRECTORY
+from mreport import MATCHING_PATTERNS
 from mreport import processing
 from mreport import graph
 from mreport.args import parser
@@ -19,13 +21,15 @@ from decorating import animated
 # this is used on the case when
 # the param pass is a directory instead a simple
 # csv file
-def normalize_arguments(csvs):
+def walk(csvs):
+    root = partial(os.path.join, CURRENT_DIRECTORY)
     files = []
     for csv in csvs:
         if os.path.isdir(csv):
-            files.append(os.readir(csv))
-        else:
-            files.append(os.path.join(CURRENT_DIRECTORY, csv))
+            enter = partial(os.path.join, root(csv))
+            files.extend(walk(map(enter, os.listdir(csv))))
+        elif any(pattern in csv for pattern in MATCHING_PATTERNS):
+            files.append(root(csv))
 
     return files
 
@@ -37,16 +41,17 @@ def get_basename(first):
         return 'report'
 
 
-@animated("reporting")
 def main():
     options = parser.parse_args()
-    csvs = normalize_arguments(options.csvs)
-    dfs = processing.parse(csvs)
-    diffs = [processing.diff(m, f) for m, f in dfs]
-    sample = diffs[0]
-    sample.time = processing.time_average(diffs)
-    labeled = processing.labelize(sample, options.long)
-    output = processing.stats(labeled['long'], options.interval)
+    with animated('reporting'):
+        csvs = walk(options.csvs)
+        dfs = processing.parse(csvs)
+        diffs = [processing.diff(m, f) for m, f in dfs]
+        sample = diffs[0]
+        sample.time = processing.time_average(diffs)
+        labeled = processing.labelize(sample, options.long)
+        output = processing.stats(labeled['long'], options.interval)
+
     basename = get_basename(csvs[0])
     if options.show_graph:
         graph.show(output)
