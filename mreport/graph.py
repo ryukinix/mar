@@ -6,3 +6,11 @@
 #   Copyright © Manoel Vilela
 #
 #
+
+
+def print(df):
+    pass
+
+
+def save(df):
+    pass
