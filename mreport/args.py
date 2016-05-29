@@ -7,12 +7,9 @@
 #
 #
 
-import os
-from argparse import ArgumentParser
-from mreport import processing
-from mreport import graph
 
-CURRENT_DIRECTORY = os.getcwd()
+from argparse import ArgumentParser
+
 parser = ArgumentParser()
 # active the graph print
 parser.add_argument(
@@ -51,11 +48,11 @@ parser.add_argument(
 
 # the slice to control the how long is counted
 parser.add_argument(
-    "-s", "--slice-size",
-    dest='slice',
+    "-i", "--interval",
+    dest='interval',
     default=1000,
     type=int,
-    help="The sice of slice to count the number of longs in the rows"
+    help="The interval number to count longs on streaking rows"
 
 )
 
@@ -67,36 +64,10 @@ parser.add_argument(
     nargs='+'
 )
 
-
-# this is used on the case when
-# the param pass is a directory instead a simple
-# csv file
-def normalize_arguments(csvs):
-    files = []
-    for csv in csvs:
-        if os.isdir(csv):
-            files.append(os.readir(csv))
-        else:
-            files.append(os.path.join(CURRENT_DIRECTORY, csv))
-
-    return files
-
-
-def main():
-    options = parser.parse_args()
-    csvs = normalize_arguments(options.args)
-    dfs = processing.parse(csvs)
-    diffs = [processing.diff(m, f) for m, f in dfs]
-    average = processing.average(diffs)
-    labeled = processing.labelize(average, options.long)
-    output = processing.stats(labeled)
-    if options.show_graph:
-        graph.show(output)
-    if options.save_graph:
-        graph.save(output)
-
-
-# parser.set_defaults(func=parser_arguments)
-
-if __name__ == '__main__':
-    main()
+parser.add_argument(
+    '-v', '--verbose',
+    dest='verbose',
+    default=False,
+    action='store_true',
+    help="Allow the user control printint or not control operations",
+)
