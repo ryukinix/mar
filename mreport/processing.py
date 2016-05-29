@@ -10,17 +10,21 @@
 import pandas as pd
 
 
-def malloc(csv):
-    pass
+def read_malloc(csv):
+    return pd.read_csv(csv)
 
 
-def free(csv):
-    pass
+def read_free(csv):
+    return pd.read_csv(csv)
 
 
-def diff(df):
+def calculate_diff(malloc_df, free_df):
     pass
 
 
 def average(dfs):
+    pass
+
+
+def stats(csvs):
     pass
