@@ -50,7 +50,7 @@ setup(
     install_requires=install_requires,
     entry_points={  # no entry-points yet
         'console_scripts': [
-            'mar = mreport.cli:main'
+            'mar = mreport.main:main'
         ]  # mar -> memory-analysis-report
     },
 )
