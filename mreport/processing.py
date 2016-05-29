@@ -8,33 +8,66 @@
 #
 
 import pandas as pd
+from decorating import animated
+from mreport import MICROSECOND
 
-
+@animated("parsing csv")
 def parse(csvs):
     mallocs = sorted(x for x in csvs if 'malloc' in x)
     frees = sorted(x for x in csvs if 'free' in x)
-    dfs = zip(mallocs, frees)
-    return [(pd.read_csv(m), pd.read_csv(f)) for m, f in dfs]
+    return [(read_malloc(malloc),
+             read_free(free))
+            for malloc, free in zip(mallocs, frees)]
 
 
-def diff(malloc, free, by='time', index='memory_id',
-         m_columns=('req', 'op', 'memory_id'),
-         f_columns=('op', 'memory_id')):
-    malloc.sort_values(index, inplace=True)
+def read_malloc(csv, delimiter=';',
+                columns=('req', 'time', 'op', 'memory_id')):
+    return pd.read_csv(csv, delimiter=delimiter, names=columns)
+
+
+def read_free(csv, delimiter=' ',
+              columns=('time', 'op', 'memory_id')):
+    return pd.read_csv(csv, delimiter=delimiter, names=columns)
+
+
+@animated("differentiating times")
+def diff(malloc, free, by='time', index=['memory_id', 'op']):
     free.sort_values(index, inplace=True)
-    df_diff = pd.merge(malloc, free)
-    df_diff[by] = (malloc[by] - free[by])
-    return df_diff
+    malloc.sort_values(index, inplace=True)
+    malloc[by] = free[by] - malloc[by]
+    return malloc
 
 
+@animated("labeling")
 def labelize(df, limit, label='long'):
-    df[label] = df.time.map(lambda x: x > limit / 1000)
+    df[label] = df.time.map(lambda x: x / MICROSECOND > limit)
     return df
 
 
-def average(dfs, by='time'):
-    return pd.merge([x[by] for x in dfs]).mean(axis=1)[by]
+@animated("average time")
+def time_average(diffs, by=['time']):
+    average = pd.concat(x[by] for x in diffs)
+    return average
 
 
-def stats(dfs, slice):
-    pass
+def stats(longs, period):
+    longs_counter = 0
+    longs_memory = 0
+    longs_distribution = []
+    for i, is_long in enumerate(longs):
+        if (i + 1) % 1000 == 0:
+            if longs_counter - longs_memory == 0:
+                longs_counter = 0
+            longs_distribution.append(longs_counter)
+            longs_memory = longs_counter
+
+        longs_counter += int(is_long)
+    return pd.DataFrame({
+        'longs': longs_distribution,
+        'interval': [interval_name(x, period) for x in 
+                     range(len(longs_distribution))]
+    })
+
+
+def interval_name(x, period):
+    return '{} - {}'.format(str(x * period), (x + 1) * period) 
