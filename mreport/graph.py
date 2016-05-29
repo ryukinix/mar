@@ -7,10 +7,22 @@
 #
 #
 
+from warnings import warn
 
-def print(df):
-    pass
+try:
+    import matplotlib
+    from matplotlib import pyplot as plt
+    matplotlib.style.use('ggplot')
+except:
+    warn("Hey, you don't have matplotlib! Install it to get "
+         "the matplotlibs plots")
 
 
-def save(df):
-    pass
+def show(df, columns=['longs']):
+    df[columns].plot()
+    plt.show()
+
+
+def save(df, fname, columns=['longs']):
+    df[columns].plot()
+    plt.figure(fname)
