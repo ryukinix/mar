@@ -7,8 +7,12 @@
 #
 #
 
+import os
 from argparse import ArgumentParser
+from mreport import processing
+from mreport import graph
 
+CURRENT_DIRECTORY = os.getcwd()
 parser = ArgumentParser()
 # active the graph print
 parser.add_argument(
@@ -64,13 +68,33 @@ parser.add_argument(
 )
 
 
-def parser_arguments(args):
-    pass
+# this is used on the case when
+# the param pass is a directory instead a simple
+# csv file
+def normalize_arguments(csvs):
+    files = []
+    for csv in csvs:
+        if os.isdir(csv):
+            files.append(os.readir(csv))
+        else:
+            files.append(os.path.join(CURRENT_DIRECTORY, csv))
+
+    return files
 
 
 def main():
     options = parser.parse_args()
-    print(options)
+    csvs = normalize_arguments(options.args)
+    dfs = processing.parse(csvs)
+    diffs = [processing.diff(m, f) for m, f in dfs]
+    average = processing.average(diffs)
+    labeled = processing.labelize(average, options.long)
+    output = processing.stats(labeled)
+    if options.show_graph:
+        graph.show(output)
+    if options.save_graph:
+        graph.save(output)
+
 
 # parser.set_defaults(func=parser_arguments)
 
