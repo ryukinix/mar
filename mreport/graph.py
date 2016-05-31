@@ -24,5 +24,6 @@ def show(df, columns=['longs']):
 
 
 def save(df, fname, columns=['longs']):
-    df[columns].plot()
-    plt.figure(fname)
+    ax = df[columns].plot()
+    fig = ax.get_figure()
+    fig.savefig('asdf.png')
