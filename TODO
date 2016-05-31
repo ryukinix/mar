@@ -4,7 +4,7 @@
  ☐ provide a wheel package
  ☐ write the docstrings for all functions
  ☐ write a properly readme.md with gifs showing the basic usage
- ☐ add: processing folder/ csv (issue)
+ ✔ add: processing folder/ csv (issue) @done (16-05-29 19:11)
  ✔ add: pair malloc.csv free.csv @done (16-05-29 18:43)
  ✔ add: print alternatively using matplotlib @done (16-05-29 18:43)
  ✔ add: control params: @done (16-05-29 18:43)

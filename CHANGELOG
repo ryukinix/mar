@@ -1,2 +1,8 @@
  ☐ v0.1
    ✔ setup basic of the project @done (16-05-28 18:02)
+   ✔ add the basic usage with: @done (16-05-29 18:41)
+     ✔ process the malloc-free csv files @done (16-05-29 18:41)
+     ✔ dynamic long as param @done (16-05-29 18:41)
+     ✔ use a custom interval @done (16-05-29 18:41)
+     ✔ save the result in a on csv: interval, longs @done (16-05-29 18:41)
+     ✔ plot the graphic as optional @done (16-05-29 18:41)
