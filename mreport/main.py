@@ -50,17 +50,25 @@ def main():
         sample = diffs[0]
         sample.time = processing.time_average(diffs)
         labeled = processing.labelize(sample, options.long)
-        output = processing.stats(labeled['long'], options.interval)
+        output_dataframe = processing.stats(labeled['long'], options.interval)
 
     basename = get_basename(csvs[0])
     if options.show_graph:
-        graph.show(output)
+        if options.verbose:
+            print(":: showing graph")
+        graph.show(output_dataframe)
     if options.save_graph:
-        graph.save(output, basename + '.jpg')
+        figurename = basename + '.jpg'
+        graph.save(output_dataframe, figurename)
+        if options.verbose:
+            print(":: saved graph on: {}".format(figurename))
     if options.verbose:
-        print(output)
+        print(output_dataframe)
 
-    output.to_csv(basename + '.csv', index=False)
+    csvname = basename + '.csv'
+    output_dataframe.to_csv(csvname, index=False)
+    if options.verbose:
+        print(":: saved csv at {}".format(csvname))
 
 if __name__ == '__main__':
     main()
