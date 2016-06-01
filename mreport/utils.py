@@ -11,12 +11,13 @@ import os
 
 
 def get_firstname(first):
+    string = ''
     if '_' in first:
-        return first.split('_')[0]
+        string += first.split('_')[0]
     elif '-' in first:
-        return first.split('-')[0]
-    else:
-        return 'report'
+        string += first.split('-')[0]
+
+    return string + 'report'
 
 
 def get_name(path):
