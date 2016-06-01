@@ -6,7 +6,7 @@
 #   Copyright © Manoel Vilela
 #
 #
-\
+
 from warnings import warn
 from mreport.utils import get_name
 

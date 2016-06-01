@@ -66,14 +66,18 @@ def stats(longs, period):
     longs_counter = 0
     longs_memory = 0
     longs_distribution = []
+    interval = 0
     for i, is_long in enumerate(longs):
         if (i + 1) % 1000 == 0:
-            if longs_counter - longs_memory == 0:
-                longs_counter = 0
+            if interval == 0:
+                longs_counter = longs_memory
+            else:
+                longs_counter = interval
+
             longs_distribution.append(longs_counter)
             longs_memory = longs_counter
 
-        longs_counter += int(is_long)
+        interval += int(is_long)
     return pd.DataFrame({
         'longs': longs_distribution,
         'interval': [interval_name(x, period) for x in
