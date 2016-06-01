@@ -3,9 +3,26 @@
 This minimal project is used to help on processing the statical analysis of the Memory Analysis Project
 
 ## Instalation
+
+## Subdeps
 ```
-sudo pip install git+git@gitlab:ryukinix/mreport.git
+sudo apt-get install python3-pip
+pip3 install setuptools libpng-dev libjpeg8-dev libfreetype6-dev
+``` 
+
+## Easy Mode
+
 ```
+sudo pip3 install git+git@gitlab:ryukinix/mreport.git
+```
+
+## Make Mode
+```
+git clone git@gitlab.com:ryukinix/mreport.git
+cd mreport && sudo make install
+```
+
+If you try modify and testing (develop), use `sudo make develop` rather `sudo make install`, this will create a dynamic instalation using symlinks to create the Python modules whose at each modification you do, you can test and receive it.
 
 ## Params
 
