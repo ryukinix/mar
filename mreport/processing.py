@@ -8,8 +8,9 @@
 #
 
 import pandas as pd
+import numpy as np
 from decorating import animated
-from mreport import MICROSECOND
+from mreport import NANOSECOND
 
 
 @animated("parsing csv")
@@ -21,17 +22,28 @@ def parse(csvs):
             for malloc, free in zip(mallocs, frees)]
 
 
+def nil_nan(x):
+    return np.NaN if x == '(nil)' else x
+
+
+def normalize(df):
+    return df.applymap(nil_nan).dropna(how='any')
+
+
+def load_csv(csv, **kwargs):
+    return normalize(pd.read_csv(csv, **kwargs))
+
+
 def read_malloc(csv, delimiter=';',
                 columns=('req', 'time', 'op', 'memory_id')):
-    return pd.read_csv(csv, delimiter=delimiter, names=columns)
+    return load_csv(csv, delimiter=delimiter, names=columns)
 
 
 def read_free(csv, delimiter=' ',
               columns=('time', 'op', 'memory_id')):
-    return pd.read_csv(csv, delimiter=delimiter, names=columns)
+    return load_csv(csv, delimiter=delimiter, names=columns)
 
 
-@animated("differentiating times")
 def diff(malloc, free, by='time', index=['memory_id', 'op']):
     free.sort_values(index, inplace=True)
     malloc.sort_values(index, inplace=True)
@@ -39,13 +51,12 @@ def diff(malloc, free, by='time', index=['memory_id', 'op']):
     return malloc
 
 
-@animated("labeling")
 def labelize(df, limit, label='long'):
-    df[label] = df.time.map(lambda x: x / MICROSECOND > limit)
+    df[label] = df.time.map(lambda x: x / NANOSECOND > limit)
     return df
 
 
-@animated("average time")
+@animated('time average')
 def time_average(diffs, by=['time']):
     average = pd.concat(x[by] for x in diffs)
     return average

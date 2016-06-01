@@ -46,9 +46,10 @@ def main():
     with animated('reporting'):
         csvs = walk(options.csvs)
         dfs = processing.parse(csvs)
-        diffs = [processing.diff(m, f) for m, f in dfs]
-        sample = diffs[0]
-        sample.time = processing.time_average(diffs)
+        with animated('differentiating time'):
+            diffs = [processing.diff(m, f) for m, f in dfs]
+        sample, _ = dfs[0]
+        sample = processing.time_average(diffs)
         labeled = processing.labelize(sample, options.long)
         output_dataframe = processing.stats(labeled['long'], options.interval)
 

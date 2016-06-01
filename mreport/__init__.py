@@ -16,5 +16,5 @@ __url__ = 'https://gitlab.com/ryukinix/mreport'
 
 # constants
 CURRENT_DIRECTORY = getcwd()
-MICROSECOND = 1e6
+NANOSECOND = 1e9
 MATCHING_PATTERNS = ('free', 'malloc')
