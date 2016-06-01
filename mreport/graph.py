@@ -21,7 +21,6 @@ except:
 
 def plot(df, fname, longsize, interval, columns=['longs']):
     ax = df[columns].plot()
-    print(dir(ax))
     ax.set_ylabel('longs memory releases with {} at least seconds'.format(longsize))
     ax.set_xlabel('Interval clusterized by {} instrunctions'.format(interval))
     plt.legend(loc='upper center')
