@@ -19,21 +19,21 @@ except:
          "the matplotlibs plots")
 
 
-def plot(df, fname, longsize, interval, columns=['longs']):
+def _plot(df, fname, longsize, interval, columns=['longs']):
     ax = df[columns].plot()
-    ax.set_ylabel('longs memory releases with {} at least seconds'.format(longsize))
-    ax.set_xlabel('Interval clusterized by {} instrunctions'.format(interval))
+    ax.set_ylabel('longs ({} s) stack allocation'.format(longsize))
+    ax.set_xlabel('Group of {} operations'.format(interval))
     plt.legend(loc='upper center')
-    plt.title('Memory Analysis of Program {}'.format(get_name(fname)))
+    plt.title('Memory Analysis:  {!r}'.format(get_name(fname)).title())
     return ax
     
 
 def show(df, fname, longsize, interval, columns=['longs']):
-    plot(df, fname, longsize, interval, columns)
+    _plot(df, fname, longsize, interval, columns)
     plt.show()
 
 
 def save(df, fname, longsize, interval, columns=['longs']):
-    ax = plot(df, fname, longsize, interval, columns)
+    ax = _plot(df, fname, longsize, interval, columns)
     fig = ax.get_figure()
     fig.savefig(fname)
