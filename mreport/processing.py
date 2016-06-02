@@ -22,12 +22,16 @@ def parse(csvs):
             for malloc, free in zip(mallocs, frees)]
 
 
-def nil_nan(x):
-    return np.NaN if x == '(nil)' else x
+def remove_nil(df):
+    if '(nil)' in df.index:
+        return df.drop('(nil)')
+    return df
 
 
 def normalize(df):
-    return df.applymap(nil_nan).dropna(how='any')
+    df = remove_nil(df)
+    df['re-usage'] = df.groupby(level=0).cumcount()
+    return df.set_index('re-usage', append=True)
 
 
 def load_csv(csv, **kwargs):
@@ -36,35 +40,32 @@ def load_csv(csv, **kwargs):
 
 def read_malloc(csv, delimiter=';',
                 columns=('req', 'time', 'op', 'memory_id'),
-                necessary=['time', 'memory_id', 'op']):
-    return load_csv(csv, delimiter=delimiter, names=columns)[necessary]
+                necessary=['time', 'op']):
+    return load_csv(csv, delimiter=delimiter,
+                    names=columns, index_col=[3])[necessary]
 
 
 def read_free(csv, delimiter=' ',
               columns=('time', 'op', 'memory_id'),
-              necessary=['time', 'memory_id', 'op']):
-    return load_csv(csv, delimiter=delimiter, names=columns)[necessary]
+              necessary=['time', 'op']):
+    return load_csv(csv, delimiter=delimiter,
+                    names=columns, index_col=[2])[necessary]
 
 
-def diff(malloc, free, by='time', index='memory_id'):
-    free.sort_values(index, inplace=True)
-    malloc.sort_values(index, inplace=True)
+def diff(malloc, free, by='time'):
     free['type'] = 'free'
     malloc['type'] = 'malloc'
     free['diff'] = np.NaN
     malloc['diff'] = np.NaN
-    for m_i, m in enumerate(malloc[index]):
-        for f_i, f in enumerate(free[index]):
-            if f == m:
-                print('freeee')
-                diff = malloc[by][m_i] - free[by][f_i]
-                malloc.loc[m_i] = diff
-                free.loc[f_i] = diff
-                break
-            if f > m:
-                break
+    free.sort_values(by, inplace=True)
+    malloc.sort_values(by, inplace=True)
 
-    return pd.concat([free, malloc]).sort_values('time').dropna(how='any')
+    for label in free.index:
+        time_diff = free.loc[label, by] - malloc.loc[label, by]
+        free.loc[label, 'diff'] = time_diff
+        malloc.loc[label, 'diff'] = time_diff
+
+    return pd.concat([free, malloc]).sort_values(by).dropna(how='any')
 
 
 def labelize(df, limit, label='long'):
