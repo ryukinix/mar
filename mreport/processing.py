@@ -30,8 +30,10 @@ def remove_nil(df):
 
 def normalize(df):
     df = remove_nil(df)
-    df['re-usage'] = df.groupby(level=0).cumcount()
-    return df.set_index('re-usage', append=True)
+    reusage = df.groupby(level=0).cumcount()
+    df.index = df.index.map(str) + reusage.map(lambda x: '-' + str(x))
+    df.reset_index()
+    return df
 
 
 def load_csv(csv, **kwargs):
@@ -40,37 +42,31 @@ def load_csv(csv, **kwargs):
 
 def read_malloc(csv, delimiter=';',
                 columns=('req', 'time', 'op', 'memory_id'),
-                necessary=['time', 'op']):
+                necessary=['time']):
     return load_csv(csv, delimiter=delimiter,
-                    names=columns, index_col=[3])[necessary]
+                    names=columns, index_col=3)[necessary]
 
 
 def read_free(csv, delimiter=' ',
               columns=('time', 'op', 'memory_id'),
-              necessary=['time', 'op']):
+              necessary=['time']):
     return load_csv(csv, delimiter=delimiter,
-                    names=columns, index_col=[2])[necessary]
+                    names=columns, index_col=2)[necessary]
 
 
 def diff(malloc, free, by='time'):
+    malloc = malloc[~free.isin(malloc)].dropna()
     free['type'] = 'free'
     malloc['type'] = 'malloc'
-    free['diff'] = np.NaN
-    malloc['diff'] = np.NaN
-    free.sort_values(by, inplace=True)
-    malloc.sort_values(by, inplace=True)
+    diff = free[by] - malloc[by]
+    free['diff'] = diff
+    malloc['diff'] = diff
 
-    for label in free.index:
-        time_diff = free.loc[label, by] - malloc.loc[label, by]
-        free.loc[label, 'diff'] = time_diff
-        malloc.loc[label, 'diff'] = time_diff
-
-    return pd.concat([free, malloc]).sort_values(by).dropna(how='any')
+    return pd.concat([malloc, free]).sort_values(by)
 
 
-def labelize(df, limit, label='long'):
-    df[label] = df['diff'].map(lambda x: x / NANOSECOND > limit)
-    return df
+def long_labelize(x, limit=1):
+    return x / NANOSECOND > limit
 
 
 @animated('time average')
@@ -85,7 +81,6 @@ def time_average(diffs, by='diff'):
 def stats(df, period):
     longs_stack = 0
     longs_distribution = []
-    print(df)
     for i, (is_long, op_type) in enumerate(zip(df.long, df.type)):
         if (i + 1) % 1000 == 0:
             longs_distribution.append(longs_stack)
