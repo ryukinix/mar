@@ -43,9 +43,9 @@ def main():
         with animated('differentiating time'):
             diffs = [processing.diff(m, f) for m, f in dfs]
         sample = diffs[0]
-        sample = processing.time_average(diffs)
+        sample['diff'] = processing.time_average(diffs)
         labeled = processing.labelize(sample, options.long)
-        output_dataframe = processing.stats(labeled['long'], options.interval)
+        output_dataframe = processing.stats(labeled, options.interval)
 
     basename = get_firstname(csvs[0])
     if options.show_graph:

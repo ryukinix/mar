@@ -35,49 +35,61 @@ def load_csv(csv, **kwargs):
 
 
 def read_malloc(csv, delimiter=';',
-                columns=('req', 'time', 'op', 'memory_id')):
-    return load_csv(csv, delimiter=delimiter, names=columns)
+                columns=('req', 'time', 'op', 'memory_id'),
+                necessary=['time', 'memory_id', 'op']):
+    return load_csv(csv, delimiter=delimiter, names=columns)[necessary]
 
 
 def read_free(csv, delimiter=' ',
-              columns=('time', 'op', 'memory_id')):
-    return load_csv(csv, delimiter=delimiter, names=columns)
+              columns=('time', 'op', 'memory_id'),
+              necessary=['time', 'memory_id', 'op']):
+    return load_csv(csv, delimiter=delimiter, names=columns)[necessary]
 
 
-def diff(malloc, free, by='time', index=['memory_id', 'op']):
+def diff(malloc, free, by='time', index='memory_id'):
     free.sort_values(index, inplace=True)
     malloc.sort_values(index, inplace=True)
-    malloc[by] = free[by] - malloc[by]
-    return malloc
+    free['type'] = 'free'
+    malloc['type'] = 'malloc'
+    free['diff'] = np.NaN
+    malloc['diff'] = np.NaN
+    for m_i, m in enumerate(malloc[index]):
+        for f_i, f in enumerate(free[index]):
+            if f == m:
+                print('freeee')
+                diff = malloc[by][m_i] - free[by][f_i]
+                malloc.loc[m_i] = diff
+                free.loc[f_i] = diff
+                break
+            if f > m:
+                break
+
+    return pd.concat([free, malloc]).sort_values('time').dropna(how='any')
 
 
 def labelize(df, limit, label='long'):
-    df[label] = df.time.map(lambda x: x / NANOSECOND > limit)
+    df[label] = df['diff'].map(lambda x: x / NANOSECOND > limit)
     return df
 
 
 @animated('time average')
-def time_average(diffs, by=['time']):
-    average = pd.concat(x[by] for x in diffs)
-    return average
+def time_average(diffs, by='diff'):
+    experiments = len(diffs)
+    times = diffs[0][by]
+    for index, df in enumerate(diffs):
+        times = pd.Series(x + y for x, y in zip(times, df[by]))
+    return times / experiments
 
 
-def stats(longs, period):
-    longs_counter = 0
-    longs_memory = 0
+def stats(df, period):
+    longs_stack = 0
     longs_distribution = []
-    interval = 0
-    for i, is_long in enumerate(longs):
+    print(df)
+    for i, (is_long, op_type) in enumerate(zip(df.long, df.type)):
         if (i + 1) % 1000 == 0:
-            if interval == 0:
-                longs_counter = longs_memory
-            else:
-                longs_counter = interval
-
-            longs_distribution.append(longs_counter)
-            longs_memory = longs_counter
-
-        interval += int(is_long)
+            longs_distribution.append(longs_stack)
+        signal = 1 if op_type == 'malloc' else -1
+        longs_stack += signal * int(is_long)
     return pd.DataFrame({
         'longs': longs_distribution,
         'interval': [interval_name(x, period) for x in
