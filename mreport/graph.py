@@ -15,7 +15,7 @@ try:
     from matplotlib import pyplot as plt
     matplotlib.style.use('ggplot')
 except:
-    warn("Hey, you don't have matplotlib! Install it to get "
+    warn("Hey, you don't have matplotlib! Install to get the plot working "
          "the matplotlibs plots")
 
 
