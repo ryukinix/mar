@@ -71,3 +71,21 @@ parser.add_argument(
     action='store_true',
     help="Allow the user control printint or not control operations",
 )
+
+
+parser.add_argument(
+    '--ignore',
+    dest='ignore',
+    default='',
+    type=str,
+    help='Pass a regex pattern to file experiments on reading',
+)
+
+
+parser.add_argument(
+    '--ignore-first',
+    dest='ignore_first',
+    default=False,
+    action='store_true',
+    help='Ignore the first experiment (the same of --ignore .*1.csv ',
+)

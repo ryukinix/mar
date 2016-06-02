@@ -17,12 +17,13 @@ from mreport import graph
 from mreport.args import parser
 from mreport.utils import get_firstname
 from decorating import animated
+import re
 
 
 # this is used on the case when
 # the param pass is a directory instead a simple
 # csv file
-def walk(csvs):
+def walk(csvs, ignore_pattern=None):
     root = partial(os.path.join, CURRENT_DIRECTORY)
     files = []
     for csv in csvs:
@@ -32,20 +33,26 @@ def walk(csvs):
         elif any(pattern in csv for pattern in MATCHING_PATTERNS):
             files.append(root(csv))
 
+    if ignore_pattern:
+        ignore = re.compile(ignore_pattern)
+        files = list(filter(lambda x: not ignore.match(x), files))
+
     return files
 
 
 def main():
     options = parser.parse_args()
+    if options.ignore_first:
+        options.ignore = '.*1.csv'
     with animated('reporting'):
-        csvs = walk(options.csvs)
+        csvs = walk(options.csvs, options.ignore)
         dfs = processing.parse(csvs)
         with animated('differentiating time'):
             diffs = [processing.diff(m, f) for m, f in dfs]
-        del dfs # desalocar memoria para dfs
+        del dfs  # desalocar memoria para dfs
         sample = diffs[0]
-        sample.diff = processing.time_average(diffs)
-        del diffs # desalocar as diferenças
+        # sample.diff = processing.time_average(diffs)
+        del diffs  # desalocar as diferenças
         label = partial(processing.long_labelize, limit=options.long)
         sample['long'] = sample['diff'].map(label)
         output_dataframe = processing.stats(sample, options.interval)
