@@ -75,7 +75,6 @@ def time_average(diffs, by='diff'):
     return times / experiments
 
 
-
 def stats(df, period):
     longs_stack = 0
     longs_distribution = []

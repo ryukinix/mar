@@ -15,6 +15,6 @@ __email__ = 'manoel_vilela@engineer.com'
 __url__ = 'https://gitlab.com/ryukinix/mreport'
 
 # constants
-CURRENT_DIRECTORY = getcwd()
 NANOSECOND = 1e9
+CURRENT_DIRECTORY = getcwd()
 MATCHING_PATTERNS = ('free', 'malloc')
