@@ -13,7 +13,7 @@ pip3 install setuptools libpng-dev libjpeg8-dev libfreetype6-dev
 ## Easy Mode
 
 ```
-sudo pip3 install git+git@gitlab:ryukinix/mreport.git
+sudo pip3 install git+https://gitlab.com/ryukinix/mreport.git
 ```
 
 ## Make Mode
