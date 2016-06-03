@@ -28,7 +28,7 @@ If you try modify and testing (develop), use `sudo make develop` rather `sudo ma
 
 ```
 usage: mar [-h] [--show-graph] [--save-graph] [-t TARGET] [-l LONG]
-           [-i INTERVAL] [-v]
+           [-i INTERVAL] [-v] [--ignore IGNORE] [--ignore-first]
            csvs [csvs ...]
 
 positional arguments:
@@ -49,6 +49,10 @@ optional arguments:
                         The interval number to count longs on streaking rows
   -v, --verbose         Allow the user control printint or not control
                         operations
+  --ignore IGNORE       Pass a regex pattern to file experiments on reading
+  --ignore-first        Ignore the first experiment (the same of --ignore
+                        .*1.csv
+
 ```
 
 
