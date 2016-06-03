@@ -8,18 +8,16 @@
 #
 
 import pandas as pd
-import numpy as np
-from decorating import animated
 from mreport import NANOSECOND
+from tqdm import tqdm
 
 
-@animated("parsing csv")
 def parse(csvs):
     mallocs = sorted(x for x in csvs if 'malloc' in x)
     frees = sorted(x for x in csvs if 'free' in x)
     return [(read_malloc(malloc),
              read_free(free))
-            for malloc, free in zip(mallocs, frees)]
+            for malloc, free in tqdm(zip(mallocs, frees), total=len(csvs)//2)]
 
 
 def remove_nil(df):
@@ -69,19 +67,19 @@ def long_labelize(x, limit=1):
     return x / NANOSECOND > limit
 
 
-@animated('time average')
 def time_average(diffs, by='diff'):
     experiments = len(diffs)
     times = diffs[0][by]
-    for index, df in enumerate(diffs):
+    for index, df in enumerate(tqdm(diffs, total=len(diffs))):
         times = pd.Series(x + y for x, y in zip(times, df[by]))
     return times / experiments
+
 
 
 def stats(df, period):
     longs_stack = 0
     longs_distribution = []
-    for i, (is_long, op_type) in enumerate(zip(df.long, df.type)):
+    for i, (is_long, op_type) in tqdm(enumerate(zip(df.long, df.type)), total=len(df.index)):
         if (i + 1) % 1000 == 0:
             longs_distribution.append(longs_stack)
         signal = 1 if op_type == 'malloc' else -1

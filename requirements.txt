@@ -2,3 +2,4 @@ pandas==0.18.1
 matplotlib==1.5.1
 numpy==1.11.0
 decorating==0.4
+tqdm==4.7.0
