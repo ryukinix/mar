@@ -44,22 +44,18 @@ def walk(csvs, ignore_pattern=None):
 def main():
     options = parser.parse_args()
     if options.ignore_first:
-        options.ignore = '.*1.csv'
+        options.ignore = '.*_1.csv'
 
-    print(":: parsing csvs")
     csvs = walk(options.csvs, options.ignore)
-    dfs = processing.parse(csvs)
-    print(":: differentiating free-malloc time on experiments")
-    diffs = [processing.diff(m, f) for m, f in tqdm(dfs)]
-    del dfs  # desalocar memoria para dfs
-    sample = diffs[0]
-    print(":: doing the average diff between the experiments")
-    sample.diff = processing.time_average(diffs)
-    del diffs  # desalocar as diferenças
-    label = partial(processing.long_labelize, limit=options.long)
-    sample['long'] = sample['diff'].map(label)
-    print(":: calculating longs")
-    output_dataframe = processing.stats(sample, options.interval)
+    groups = processing.group_csvs(csvs)
+    dfs = processing.parse(groups)
+    diffs = (processing.diff(m, f) for m, f in dfs)
+    print(":: dynamic evaluating experiments")
+    print(":: load csv -> differentiating -> mean -> tagging longs")
+    processed = processing.eval_experiment(diffs, n_experiments=len(groups), 
+                                           long_size=options.long)
+    print(":: counting longs ")
+    output_dataframe = processing.stats(processed, options.interval)
 
     basename = get_firstname(csvs[0])
     if options.show_graph:

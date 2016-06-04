@@ -10,14 +10,18 @@
 import pandas as pd
 from mreport import NANOSECOND
 from tqdm import tqdm
+from functools import partial
 
 
-def parse(csvs):
+def parse(csvs_groups):
+    return ((read_malloc(m),read_free(f))
+            for m, f in csvs_groups)
+
+
+def group_csvs(csvs):
     mallocs = sorted(x for x in csvs if 'malloc' in x)
     frees = sorted(x for x in csvs if 'free' in x)
-    return [(read_malloc(malloc),
-             read_free(free))
-            for malloc, free in tqdm(zip(mallocs, frees), total=len(csvs)//2)]
+    return list(zip(mallocs, frees))
 
 
 def remove_nil(df):
@@ -63,16 +67,14 @@ def diff(malloc, free, by='time'):
     return pd.concat([malloc, free]).sort_values(by)
 
 
-def long_labelize(x, limit=1):
-    return x / NANOSECOND > limit
-
-
-def time_average(diffs, by='diff'):
-    experiments = len(diffs)
-    times = diffs[0][by]
-    for index, df in enumerate(tqdm(diffs, total=len(diffs))):
+def eval_experiment(diffs, n_experiments, long_size=1, by='diff'):
+    sample = next(diffs)
+    times = sample[by]
+    for index, df in tqdm(enumerate(diffs), total=n_experiments, initial=1):
         times = pd.Series(x + y for x, y in zip(times, df[by]))
-    return times / experiments
+    sample.diff = times / n_experiments
+    sample['long'] = sample['diff'].map(lambda x: x / NANOSECOND > long_size)
+    return sample
 
 
 def stats(df, period):
