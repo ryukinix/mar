@@ -73,8 +73,8 @@ def eval_experiment(diffs, n_experiments, long_size, by='diff'):
     for index, df in tqdm(enumerate(diffs), total=n_experiments, initial=1):
         times = pd.Series(x + y for x, y in zip(times, df[by]))
     smp.diff = times / n_experiments
-    smp['long'] = sample['diff'].map(lambda x: x / NANOSECOND  in long_size)
-    return sample
+    smp['long'] = smp['diff'].map(lambda x: x / NANOSECOND  in long_size)
+    return smp
 
 
 def stats(df, period):
