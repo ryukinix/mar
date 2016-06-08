@@ -10,7 +10,7 @@
 from setuptools import setup, find_packages
 from codecs import open  # To use a consistent encoding
 from os import path
-import mreport
+import mar
 
 here = path.abspath(path.dirname(__file__))
 readme = path.join(here, 'README.md')
@@ -22,8 +22,8 @@ with open('requirements.txt') as f:
     install_requires = list(map(str.strip, f.readlines()))
 
 setup(
-    name=mreport.__name__,
-    version=mreport.__version__,
+    name=mar.__name__,
+    version=mar.__version__,
     description="A tool stats parser whose report the of dump memory analysis",
     long_description=long_description,
     classifiers=[
@@ -38,10 +38,10 @@ setup(
         "Programming Language :: Python :: 3.5",
     ],
     # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-    keywords='mreport memory analysis pandas table stats',
-    author=mreport.__author__,
-    author_email=mreport.__email__,
-    url=mreport.__url__,
+    keywords='mar memory analysis pandas table stats',
+    author=mar.__author__,
+    author_email=mar.__email__,
+    url=mar.__url__,
     zip_safe=False,
     license='MIT',
     packages=find_packages(exclude=['ez_setup', 'examples',
@@ -50,7 +50,7 @@ setup(
     install_requires=install_requires,
     entry_points={  # no entry-points yet
         'console_scripts': [
-            'mar = mreport.main:main'
+            'mar = mar.main:main'
         ]  # mar -> memory-analysis-report
     },
 )

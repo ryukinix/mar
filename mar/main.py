@@ -11,12 +11,12 @@ import os
 import re
 from functools import partial
 
-from mreport import CURRENT_DIRECTORY
-from mreport import MATCHING_PATTERNS
-from mreport import processing
-from mreport import graph
-from mreport.args import parser
-from mreport.utils import get_firstname
+from mar import CURRENT_DIRECTORY
+from mar import MATCHING_PATTERNS
+from mar import processing
+from mar import graph
+from mar.args import parser
+from mar.utils import get_firstname
 from tqdm import tqdm
 from decorating import animated
 

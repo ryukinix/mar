@@ -8,7 +8,7 @@
 #
 
 import pandas as pd
-from mreport import NANOSECOND
+from mar import NANOSECOND
 from tqdm import tqdm
 from functools import partial
 

@@ -8,7 +8,7 @@
 #
 
 from warnings import warn
-from mreport.utils import get_name
+from mar.utils import get_name
 
 try:
     import matplotlib
