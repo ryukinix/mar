@@ -43,15 +43,16 @@ optional arguments:
                         The path (can be a folder name or path) to save the
                         output
   -l LONG, --long-size LONG
-                        The long size in seconds to labelize the allocation
-                        time
+                        The long size range like [x, y] (closed-range) to
+                        labelize the allocation time
   -i INTERVAL, --interval INTERVAL
                         The interval number to count longs on streaking rows
   -v, --verbose         Allow the user control printint or not control
                         operations
-  --ignore IGNORE       Pass a regex pattern to file experiments on reading
+  --ignore IGNORE       Pass a wildcard pattern to file experiments on reading
   --ignore-first        Ignore the first experiment (the same of --ignore
                         .*1.csv
+
 
 ```
 

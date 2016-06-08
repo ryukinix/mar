@@ -46,7 +46,7 @@ parser.add_argument(
     dest='long',
     default=Interval('[1, 3]'),
     type=Interval,
-    help="The long size in seconds to labelize the allocation time"
+    help="The long size range like [x, y] (closed-range) to labelize the allocation time"
 )
 
 # the slice to control the how long is counted
@@ -90,5 +90,5 @@ parser.add_argument(
     dest='ignore_first',
     default=False,
     action='store_true',
-    help='Ignore the first experiment (the same of --ignore .*1.csv ',
+    help='Ignore the first experiment (the same of --ignore *1.csv)',
 )
