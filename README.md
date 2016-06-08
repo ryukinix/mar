@@ -42,16 +42,18 @@ optional arguments:
   -t TARGET, --target TARGET
                         The path (can be a folder name or path) to save the
                         output
-  -l LONG, --long-size LONG
-                        The long size range like [x, y] (closed-range) to
-                        labelize the allocation time
+  -l LONG, --long-range LONG
+                        The long range range like [x, y] (closed-range) to
+                        labelize the allocation time. Use +inf or -inf to
+                        handle infinite intervals like [-inf, +inf] will get
+                        all allocations
   -i INTERVAL, --interval INTERVAL
                         The interval number to count longs on streaking rows
   -v, --verbose         Allow the user control printint or not control
                         operations
   --ignore IGNORE       Pass a wildcard pattern to file experiments on reading
   --ignore-first        Ignore the first experiment (the same of --ignore
-                        .*1.csv
+                        *1.csv)
 
 
 ```
