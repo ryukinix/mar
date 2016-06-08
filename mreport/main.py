@@ -35,8 +35,7 @@ def walk(csvs, ignore_pattern=None):
             files.append(root(csv))
 
     if ignore_pattern:
-        ignore = re.compile(ignore_pattern)
-        files = list(filter(lambda x: not ignore.match(x), files))
+        files = list(filter(lambda x: not ignore_pattern.match(x), files))
 
     return files
 
@@ -44,7 +43,7 @@ def walk(csvs, ignore_pattern=None):
 def main():
     options = parser.parse_args()
     if options.ignore_first:
-        options.ignore = '.*_1.csv'
+        options.ignore = re.compile('.*_1.csv')
 
     csvs = walk(options.csvs, options.ignore)
     groups = processing.group_csvs(csvs)

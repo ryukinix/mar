@@ -9,6 +9,8 @@
 
 
 from argparse import ArgumentParser
+import fnmatch
+import re
 
 parser = ArgumentParser()
 # active the graph print
@@ -77,8 +79,8 @@ parser.add_argument(
     '--ignore',
     dest='ignore',
     default='',
-    type=str,
-    help='Pass a regex pattern to file experiments on reading',
+    type=lambda x: re.compile(fnmatch.translate(x)),
+    help='Pass a wildcard pattern to file experiments on reading',
 )
 
 
