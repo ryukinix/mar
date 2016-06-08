@@ -9,6 +9,7 @@
 
 
 from argparse import ArgumentParser
+from mar.interval import Interval
 import fnmatch
 import re
 
@@ -43,8 +44,8 @@ parser.add_argument(
 parser.add_argument(
     '-l', '--long-size',
     dest='long',
-    default=1,
-    type=float,
+    default=Interval('[1, 3]'),
+    type=Interval,
     help="The long size in seconds to labelize the allocation time"
 )
 

@@ -67,13 +67,13 @@ def diff(malloc, free, by='time'):
     return pd.concat([malloc, free]).sort_values(by)
 
 
-def eval_experiment(diffs, n_experiments, long_size=1, by='diff'):
-    sample = next(diffs)
-    times = sample[by]
+def eval_experiment(diffs, n_experiments, long_size, by='diff'):
+    smp = next(diffs)
+    times = smp[by]
     for index, df in tqdm(enumerate(diffs), total=n_experiments, initial=1):
         times = pd.Series(x + y for x, y in zip(times, df[by]))
-    sample.diff = times / n_experiments
-    sample['long'] = sample['diff'].map(lambda x: x / NANOSECOND > long_clearsize)
+    smp.diff = times / n_experiments
+    smp['long'] = sample['diff'].map(lambda x: x / NANOSECOND  in long_size)
     return sample
 
 
