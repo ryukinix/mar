@@ -46,8 +46,10 @@ parser.add_argument(
     dest='long',
     default=Interval('[1, 3]'),
     type=Interval,
-    help=("The long range range like [x, y] (closed-range) to labelize the allocation time.\n"
-          "Use +inf or -inf to handle infinite intervals like [-inf, +inf] will get all allocations")
+    help=("The long range range like [x, y] (closed-range) or "
+          "(a, b) (open-range) to labelize the allocation time.\n"
+          "Use +inf or -inf to handle infinite intervals like (-inf, +inf) "
+          "will get all allocations")
 )
 
 # the slice to control the how long is counted
