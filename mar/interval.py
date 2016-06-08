@@ -15,6 +15,8 @@
 
 """
 
+import numpy as np
+
 class Interval(object):
 
     def __init__(self, interval):
@@ -30,7 +32,7 @@ class Interval(object):
         return self.interval
 
     def parse(self, interval):
-        return list(map(float, 
+        return list(map(np.float, 
                         interval.strip('[]()').split(',')))
 
     def __contains__(self, element):

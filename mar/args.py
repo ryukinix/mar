@@ -40,13 +40,14 @@ parser.add_argument(
     help="The path (can be a folder name or path) to save the output"
 )
 
-# the long size
+# the long range
 parser.add_argument(
-    '-l', '--long-size',
+    '-l', '--long-range',
     dest='long',
     default=Interval('[1, 3]'),
     type=Interval,
-    help="The long size range like [x, y] (closed-range) to labelize the allocation time"
+    help=("The long range range like [x, y] (closed-range) to labelize the allocation time.\n"
+          "Use +inf or -inf to handle infinite intervals like [-inf, +inf] will get all allocations")
 )
 
 # the slice to control the how long is counted
