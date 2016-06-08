@@ -22,7 +22,8 @@ class Interval(object):
         self.left, self.right = self.parse(self.interval)
 
     def parse(self, interval):
-        return list(map(int, interval.strip('[]()').split(',')))
+        return list(map(float, 
+                        interval.strip('[]()').split(',')))
 
     def __contains__(self, element):
         return self > element and self < element

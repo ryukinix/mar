@@ -9,7 +9,7 @@
 
 from os import getcwd
 
-__version__ = '0.3'
+__version__ = '0.4'
 __author__ = 'Manoel Vilela'
 __email__ = 'manoel_vilela@engineer.com'
 __url__ = 'https://gitlab.com/ryukinix/mar'
