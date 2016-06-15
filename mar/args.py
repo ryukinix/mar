@@ -95,3 +95,11 @@ parser.add_argument(
     action='store_true',
     help='Ignore the first experiment (the same of --ignore *1.csv)',
 )
+
+parser.add_argument(
+    '-c', '--count-clusters',
+    dest='count_clusters',
+    default=False,
+    action='store_true',
+    help="Count the short/mid/long allocations and save a csv."
+)
