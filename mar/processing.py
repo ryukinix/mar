@@ -8,13 +8,13 @@
 #
 
 import pandas as pd
+import numpy as np
 from mar import NANOSECOND
 from tqdm import tqdm
-from functools import partial
 
 
 def parse(csvs_groups):
-    return ((read_malloc(m),read_free(f))
+    return ((read_malloc(m), read_free(f))
             for m, f in csvs_groups)
 
 
@@ -57,6 +57,7 @@ def read_free(csv, delimiter=' ',
 
 
 def diff(malloc, free, by='time'):
+    # sync just mallocs whose has free
     malloc = malloc[~free.isin(malloc)].dropna()
     free['type'] = 'free'
     malloc['type'] = 'malloc'
@@ -67,29 +68,52 @@ def diff(malloc, free, by='time'):
     return pd.concat([malloc, free]).sort_values(by)
 
 
-def eval_experiment(diffs, n_experiments, long_size, by='diff'):
+def mean_experiment(diffs, n_experiments, long_range, by='diff'):
     smp = next(diffs)
     times = smp[by]
     for index, df in tqdm(enumerate(diffs), total=n_experiments, initial=1):
         times = pd.Series(x + y for x, y in zip(times, df[by]))
     smp.diff = times / n_experiments
-    smp['long'] = smp['diff'].map(lambda x: x / NANOSECOND  in long_size)
     return smp
 
 
-def stats(df, period):
+def clusterize(x, linspace):
+    if x >= linspace[2]:
+        return 'long'
+    elif x >= linspace[1]:
+        return 'medium'
+    elif x > linspace[0]:
+        return 'short'
+    else:
+        return 'undefined'
+
+
+def classify_long(df, long_range):
+    return df['diff'].map(lambda x: x / NANOSECOND in long_range)
+
+
+def classify_clusters(df, long_range):
+    lp = np.linspace(long_range.left, long_range.right, num=3)
+    return df['diff'].map(lambda x: clusterize(x, lp))
+
+
+def count_longs(df, period):
     longs_stack = 0
     longs_distribution = []
-    for i, (is_long, op_type) in tqdm(enumerate(zip(df.long, df.type)), total=len(df.index)):
+    values = tqdm(enumerate(zip(df.long, df.type)),
+                  total=len(df.index))
+    for i, (is_long, op_type) in values:
         if (i + 1) % 1000 == 0:
             longs_distribution.append(longs_stack)
         signal = 1 if op_type == 'malloc' else -1
         longs_stack += signal * int(is_long)
-    return pd.DataFrame({
-        'longs': longs_distribution,
-        'interval': [interval_name(x, period) for x in
-                     range(len(longs_distribution))]
-    })
+    return pd.DataFrame(dict(longs=longs_distribution,
+                             interval=[interval_name(x, period) for x in
+                                       range(len(longs_distribution))]))
+
+
+def count_clusters(diffs):
+    return pd.DataFrame()
 
 
 def interval_name(x, period):

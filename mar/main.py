@@ -17,7 +17,6 @@ from mar import processing
 from mar import graph
 from mar.args import parser
 from mar.utils import get_firstname
-from tqdm import tqdm
 from decorating import animated
 
 
@@ -40,6 +39,31 @@ def walk(csvs, ignore_pattern=None):
     return files
 
 
+def plot_save(output_dataframe, basename, options):
+    if options.show_graph:
+        if options.verbose:
+            print(":: showing graph")
+        with animated("ploting the graph"):
+            graph.show(output_dataframe, basename,
+                       options.long, options.interval)
+    if options.save_graph:
+        figurename = basename + '.jpg'
+        graph.save(output_dataframe, figurename,
+                   options.long, options.interval)
+        if options.verbose:
+            print(":: saved graph on: {}".format(figurename))
+    if options.verbose:
+        print(output_dataframe)
+
+
+def save_csv(output_dataframe, basename, options):
+    with animated("saving output on csv"):
+        csvname = basename + '.csv'
+        output_dataframe.to_csv(csvname, index=False)
+        if options.verbose:
+            print(":: saved csv at {}".format(csvname))
+
+
 def main():
     options = parser.parse_args()
     if options.ignore_first:
@@ -50,31 +74,22 @@ def main():
     dfs = processing.parse(groups)
     diffs = (processing.diff(m, f) for m, f in dfs)
     print(":: dynamic evaluating experiments")
-    print(":: load csv -> differentiating -> mean -> tagging longs")
-    processed = processing.eval_experiment(diffs, n_experiments=len(groups), 
-                                           long_size=options.long)
-    print(":: counting longs ")
-    output_dataframe = processing.stats(processed, options.interval)
+
+    if options.count_clusters:
+        print(":: load csv -> differntiating -> count short/mid/long")
+        output_dataframe = processing.count_clusters(diffs)
+    else:
+        print(":: load csv -> differentiating -> mean -> tagging longs")
+        processed = processing.mean_experiment(diffs,
+                                               n_experiments=len(groups),
+                                               long_size=options.long)
+        print(":: counting longs ")
+        processed.long = processing.classify_long(processed, options.long)
+        output_dataframe = processing.stats(processed, options.interval)
 
     basename = get_firstname(csvs[0])
-    if options.show_graph:
-        if options.verbose:
-            print(":: showing graph")
-        with animated("ploting the graph"):
-            graph.show(output_dataframe, basename, options.long, options.interval)
-    if options.save_graph:
-        figurename = basename + '.jpg'
-        graph.save(output_dataframe, figurename, options.long, options.interval)
-        if options.verbose:
-            print(":: saved graph on: {}".format(figurename))
-    if options.verbose:
-        print(output_dataframe)
-
-    with animated("saving output on csv"):
-        csvname = basename + '.csv'
-        output_dataframe.to_csv(csvname, index=False)
-        if options.verbose:
-            print(":: saved csv at {}".format(csvname))
+    plot_save(output_dataframe, basename, options)
+    save_csv(output_dataframe, basename, options)
 
 if __name__ == '__main__':
     main()
