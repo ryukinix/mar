@@ -77,7 +77,7 @@ def main():
 
     if options.count_clusters:
         print(":: load csv -> differntiating -> count short/mid/long")
-        output_dataframe = processing.count_clusters(diffs)
+        output_dataframe = processing.count_clusters(diffs, options.long)
     else:
         print(":: load csv -> differentiating -> mean -> tagging longs")
         processed = processing.mean_experiment(diffs,

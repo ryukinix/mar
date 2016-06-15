@@ -112,8 +112,25 @@ def count_longs(df, period):
                                        range(len(longs_distribution))]))
 
 
-def count_clusters(diffs):
-    return pd.DataFrame()
+def count_clusters(diffs, long_range):
+    table = dict(short=[],
+                 medium=[],
+                 long=[],
+                 undefined=[])
+
+    for diff in tqdm(diffs):
+        stats = dict(short=0,
+                     medium=0,
+                     long=0,
+                     undefined=0)
+        diff.label = classify_clusters(diff, long_range)
+        for label in tqdm(diff.label):
+            stats[label] += 1
+
+        for k, v in stats.items():
+            table[k] += [v]
+
+    return pd.DataFrame(table)
 
 
 def interval_name(x, period):
