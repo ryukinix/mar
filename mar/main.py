@@ -75,17 +75,16 @@ def main():
     diffs = (processing.diff(m, f) for m, f in dfs)
     print(":: dynamic evaluating experiments")
 
+    args = (diffs, len(groups), options.long)
     if options.count_clusters:
-        print(":: load csv -> differntiating -> count short/mid/long")
-        output_dataframe = processing.count_clusters(diffs, options.long)
+        print(":: load csv -> differentiating -> count short/mid/long")
+        output_dataframe = processing.count_clusters(*args)
     else:
         print(":: load csv -> differentiating -> mean -> tagging longs")
-        processed = processing.mean_experiment(diffs,
-                                               n_experiments=len(groups),
-                                               long_size=options.long)
+        processed = processing.mean_experiment(*args)
         print(":: counting longs ")
         processed.long = processing.classify_long(processed, options.long)
-        output_dataframe = processing.stats(processed, options.interval)
+        output_dataframe = processing.count_longs(processed, options.interval)
 
     basename = get_firstname(csvs[0])
     plot_save(output_dataframe, basename, options)

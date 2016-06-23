@@ -28,7 +28,7 @@ If you try modify and testing (develop), use `sudo make develop` rather `sudo ma
 
 ```
 usage: mar [-h] [--show-graph] [--save-graph] [-t TARGET] [-l LONG]
-           [-i INTERVAL] [-v] [--ignore IGNORE] [--ignore-first]
+           [-i INTERVAL] [-v] [--ignore IGNORE] [--ignore-first] [-c]
            csvs [csvs ...]
 
 positional arguments:
@@ -43,10 +43,10 @@ optional arguments:
                         The path (can be a folder name or path) to save the
                         output
   -l LONG, --long-range LONG
-                        The long range range like [x, y] (closed-range) to
-                        labelize the allocation time. Use +inf or -inf to
-                        handle infinite intervals like [-inf, +inf] will get
-                        all allocations
+                        The long range range like [x, y] (closed-range) or (a,
+                        b) (open-range) to labelize the allocation time. Use
+                        +inf or -inf to handle infinite intervals like (-inf,
+                        +inf) will get all allocations
   -i INTERVAL, --interval INTERVAL
                         The interval number to count longs on streaking rows
   -v, --verbose         Allow the user control printint or not control
@@ -54,7 +54,7 @@ optional arguments:
   --ignore IGNORE       Pass a wildcard pattern to file experiments on reading
   --ignore-first        Ignore the first experiment (the same of --ignore
                         *1.csv)
-
+  -c, --count-clusters  Count the short/mid/long allocations and save a csv.
 
 ```
 

@@ -17,6 +17,7 @@
 
 import numpy as np
 
+
 class Interval(object):
 
     def __init__(self, interval):
@@ -28,6 +29,7 @@ class Interval(object):
         return '<{cls} {interval} at {id}>'.format(cls=self.__name__(),
                                                    interval=self.interval,
                                                    id=hex(id(self)))
+
     def infer_range(self):
         lclosed, rclosed = True, True
         if (self.interval.startswith('(') or
@@ -43,27 +45,26 @@ class Interval(object):
         return self.interval
 
     def parse(self, interval):
-        return list(map(np.float, 
+        return list(map(np.float,
                         interval.strip('[]()').split(',')))
 
     def __contains__(self, element):
-        return (((self.rclosed and self >= element) or 
+        return (((self.rclosed and self >= element) or
                  (not self.rclosed and self > element)) and
                 ((self.lclosed and self <= element) or
                  (not self.lclosed and self < element)))
 
-
     def __gt__(self, element):
-        return self.right > element 
+        return self.right > element
 
     def __lt__(self, element):
         return self.left < element
 
     def __ge__(self, element):
-        return self.right >= element 
+        return self.right >= element
 
     def __le__(self, element):
-        return self.left <= element 
+        return self.left <= element
 
     @classmethod
     def __name__(cls):

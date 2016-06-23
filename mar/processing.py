@@ -112,13 +112,13 @@ def count_longs(df, period):
                                        range(len(longs_distribution))]))
 
 
-def count_clusters(diffs, long_range):
+def count_clusters(diffs, n_experiments, long_range):
     table = dict(short=[],
                  medium=[],
                  long=[],
                  undefined=[])
 
-    for diff in tqdm(diffs):
+    for diff in tqdm(diffs, total=n_experiments):
         stats = dict(short=0,
                      medium=0,
                      long=0,
