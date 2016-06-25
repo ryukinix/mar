@@ -1,11 +1,13 @@
-#!/usr/bin/env python
-# coding=utf-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 #
-#   Python Script
+#    Copyright © Manoel Vilela
 #
-#   Copyright © Manoel Vilela
+#    @project: Memory Analysis Report
+#     @author: Manoel Vilela
+#      @email: manoel_vilela@engineer.com
 #
-#
+
 
 
 from argparse import ArgumentParser

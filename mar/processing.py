@@ -1,11 +1,13 @@
-#!/usr/bin/env python
-# coding=utf-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 #
-#   Python Script
+#    Copyright © Manoel Vilela
 #
-#   Copyright © Manoel Vilela
+#    @project: Memory Analysis Report
+#     @author: Manoel Vilela
+#      @email: manoel_vilela@engineer.com
 #
-#
+
 
 import pandas as pd
 import numpy as np
@@ -44,16 +46,18 @@ def load_csv(csv, **kwargs):
 
 def read_malloc(csv, delimiter=';',
                 columns=('req', 'time', 'op', 'memory_id'),
+                index_col=3,
                 necessary=['time']):
     return load_csv(csv, delimiter=delimiter,
-                    names=columns, index_col=3)[necessary]
+                    names=columns, index_col=index_col)[necessary]
 
 
 def read_free(csv, delimiter=' ',
               columns=('time', 'op', 'memory_id'),
+              index_col=2,
               necessary=['time']):
     return load_csv(csv, delimiter=delimiter,
-                    names=columns, index_col=2)[necessary]
+                    names=columns, index_col=index_col)[necessary]
 
 
 def diff(malloc, free, by='time'):
