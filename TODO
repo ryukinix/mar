@@ -1,9 +1,10 @@
 # feature request  vs tasks to do
- ✔ basic setup of the repository tree @done (16-05-28 17:50)
  ☐ add tests
- ☐ provide a wheel package
  ☐ write the docstrings for all functions
  ☐ write a properly readme.md with gifs showing the basic usage
+ ☐ create a full report about the developing since the v0.1 until v0.5 on CHANGELOG
+ ✔ basic setup of the repository tree @done (16-05-28 17:50)
+ ✔ provide a wheel package @done (16-06-25 20:03)
  ✔ add: processing folder/ csv (issue) @done (16-05-29 19:11)
  ✔ add: pair malloc.csv free.csv @done (16-05-29 18:43)
  ✔ add: print alternatively using matplotlib @done (16-05-29 18:43)
