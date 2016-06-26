@@ -95,12 +95,12 @@ def remove_zeros(malloc, column='req'):
     return malloc
 
 
-def mean(diffs, n_experiments, long_range, by='diff'):
+def mean(diffs, total, by='diff'):
     smp = next(diffs)
     times = smp[by]
-    for index, df in tqdm(enumerate(diffs), total=n_experiments, initial=1):
+    for index, df in tqdm(enumerate(diffs), total=total, initial=1):
         times = pd.Series(x + y for x, y in zip(times, df[by]))
-    smp.diff = times / n_experiments
+    smp.diff = times / total
     return smp
 
 
@@ -130,7 +130,7 @@ def count_longs(df, period):
     values = tqdm(enumerate(zip(df.long, df.type)),
                   total=len(df.index))
     for i, (is_long, op_type) in values:
-        if (i + 1) % 1000 == 0:
+        if (i + 1) % period == 0:
             longs_distribution.append(longs_stack)
         signal = 1 if op_type == 'malloc' else -1
         longs_stack += signal * int(is_long)
@@ -139,13 +139,13 @@ def count_longs(df, period):
                                        range(len(longs_distribution))]))
 
 
-def count_clusters(diffs, n_experiments, long_range):
+def count_clusters(diffs, total, long_range):
     table = dict(short=[],
                  medium=[],
                  long=[],
                  undefined=[])
 
-    for diff in tqdm(diffs, total=n_experiments):
+    for diff in tqdm(diffs, total=total):
         stats = dict(short=0,
                      medium=0,
                      long=0,

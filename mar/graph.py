@@ -22,36 +22,41 @@ except:
          "the matplotlibs plots")
 
 
-def _plot(df, fname, longsize, interval):
+def _plot(df, fname, x_label, y_label):
     ax = df.plot()
-    ax.set_ylabel('longs ({} s) stack allocation'.format(longsize))
-    ax.set_xlabel('Group of {} operations'.format(interval))
-    plt.legend(loc='upper center')
+    ax.set_ylabel(x_label)
+    ax.set_xlabel(y_label)
+    plt.legend(loc='upper right')
     plt.title('Memory Analysis:  {!r}'.format(get_name(fname)).title())
     return ax
 
 
-def show(df, fname, longsize, interval):
-    _plot(df, fname, longsize, interval)
+def show(df, fname, x_label, y_label):
+    _plot(df, fname, x_label, y_label)
     plt.show()
 
 
-def save(df, fname, longsize, interval):
-    ax = _plot(df, fname, longsize, interval)
+def save(df, fname, x_label, y_label):
+    ax = _plot(df, fname, x_label, y_label)
     fig = ax.get_figure()
     fig.savefig(fname)
 
 
-def plot_save(output_dataframe, basename, options):
+def plot_save(output_dataframe, basename, options,
+              x_label='Stack allocation',
+              y_label='Operations in execution by time'):
+    verbose = False
+    if 'verbose' in options and options.verbose:
+        verbose = True
     if options.show_graph:
-        if options.verbose:
+        if verbose:
             print(":: showing graph")
         with animated("ploting the graph"):
-            show(output_dataframe, basename, options.long, options.interval)
+            show(output_dataframe, basename, x_label, y_label)
     if options.save_graph:
         figurename = basename + '.jpg'
-        save(output_dataframe, figurename, options.long, options.interval)
-        if options.verbose:
+        save(output_dataframe, figurename, x_label, y_label)
+        if verbose:
             print(":: saved graph on: {}".format(figurename))
-    if options.verbose:
+    if verbose:
         print(output_dataframe)

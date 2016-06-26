@@ -27,18 +27,6 @@ def minimal():
         help="The path (can be a folder name or path) to save the output"
     )
 
-    # the long range
-    parser.add_argument(
-        '-l', '--long-range',
-        dest='long',
-        default=Interval('[1, 3]'),
-        type=Interval,
-        help=("The long range range like [x, y] (closed-range) or "
-              "(a, b) (open-range) to labelize the allocation time.\n"
-              "Use +inf or -inf to handle infinite intervals "
-              "like (-inf, +inf) will get all allocations"),
-    )
-
     # the slice to control the how long is counted
     parser.add_argument(
         "-i", "--interval",
@@ -46,7 +34,6 @@ def minimal():
         default=1000,
         type=int,
         help="The interval number to count longs on streaking rows"
-
     )
 
     # the default argument evaluation handled about the csv files
@@ -117,4 +104,16 @@ def handler():
         default=False,
         action='store_true',
         help="Count the short/mid/long allocations and save a csv."
+    )
+
+    # the long range
+    parser.add_argument(
+        '-l', '--long-range',
+        dest='long',
+        default=Interval('[1, 3]'),
+        type=Interval,
+        help=("The long range range like [x, y] (closed-range) or "
+              "(a, b) (open-range) to labelize the allocation time.\n"
+              "Use +inf or -inf to handle infinite intervals "
+              "like (-inf, +inf) will get all allocations"),
     )

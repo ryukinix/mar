@@ -35,11 +35,11 @@ def get_name(path):
     return get_firstname(os.path.basename(path), suffix='')
 
 
-def save_csv(output_dataframe, basename, options):
+def save_csv(output_dataframe, basename, verbose=False):
     with animated("saving output on csv"):
         csvname = basename + '.csv'
         output_dataframe.to_csv(csvname, index=False)
-        if options.verbose:
+        if verbose:
             print(":: saved csv at {}".format(csvname))
 
 
