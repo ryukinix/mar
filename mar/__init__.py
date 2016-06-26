@@ -9,6 +9,11 @@
 #
 
 from os import getcwd
+from mar import cli
+from mar import graph
+from mar import interval
+from mar import processing
+from mar import utils
 
 # information about the project
 __version__ = '0.5.1'
@@ -23,6 +28,14 @@ __abstract__ = (
     'Beyond that,  the user can choice by CLI to save or show graphs. '
     'v{} Developed by Manoel Vilela on Federal University of Pará '
     'as Student Researcher at {}'.format(__version__, __date__))
+
+__all__ = [
+    'cli',
+    'graph',
+    'interval',
+    'processing',
+    'utils'
+]
 
 # constants
 NANOSECOND = 1e9
