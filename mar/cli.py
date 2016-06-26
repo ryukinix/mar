@@ -85,7 +85,7 @@ def misc():
     )
 
     parser.add_argument(
-        '-v', '--version',
+        '-V', '--version',
         default=False,
         help='Print the version of MAR.'
     )

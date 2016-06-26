@@ -17,12 +17,16 @@ from tqdm import tqdm
 import mar
 
 
-def parse(csvs_groups, nil=False):
-    return ((read_malloc(m, nil), read_free(f, nil))
+def parse(csvs_groups,
+          nil=False,
+          malloc_columns=['time'],
+          free_columns=['time']):
+    return ((read_malloc(m, nil, necessary=malloc_columns),
+             read_free(f, nil, necessary=free_columns))
             for m, f in csvs_groups)
 
 
-def group_csvs(csvs):
+def group(csvs):
     mallocs = sorted(x for x in csvs if 'malloc' in x)
     frees = sorted(x for x in csvs if 'free' in x)
     return list(zip(mallocs, frees))
@@ -77,7 +81,18 @@ def diff(malloc, free, by='time'):
     return pd.concat([malloc, free]).sort_values(by)
 
 
-def mean_experiment(diffs, n_experiments, long_range, by='diff'):
+def merge(malloc, free, sorting_by='time'):
+    malloc = malloc[~free.isin(malloc)].dropna()
+    free['type'] = 'free'
+    malloc['type'] = 'malloc'
+    return pd.concat([malloc, free]).sort_values(sorting_by)
+
+
+def remove_zeros(malloc):
+    pass
+
+
+def mean(diffs, n_experiments, long_range, by='diff'):
     smp = next(diffs)
     times = smp[by]
     for index, df in tqdm(enumerate(diffs), total=n_experiments, initial=1):
@@ -97,7 +112,7 @@ def clusterize(x, linspace):
         return 'undefined'
 
 
-def classify_long(df, long_range):
+def classify_longs(df, long_range):
     return df['diff'].map(lambda x: x / mar.NANOSECOND in long_range)
 
 

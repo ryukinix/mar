@@ -21,6 +21,7 @@ def main():
     cli.minimal()
     cli.graph()
     cli.handler()
+    cli.misc()
 
     options = cli.parser.parse_args()
     if options.ignore_first:
@@ -28,7 +29,7 @@ def main():
 
     # pre-processing
     csvs = utils.walk(options.csvs, options.ignore)
-    groups = processing.group_csvs(csvs)
+    groups = processing.group(csvs)
     dfs = processing.parse(groups)
     diffs = (processing.diff(m, f) for m, f in dfs)
     print(":: dynamic evaluating experiments")
@@ -40,9 +41,9 @@ def main():
         output_dataframe = processing.count_clusters(*cli)
     else:  # just getting the longs
         print(":: load csv -> differentiating -> mean -> tagging longs")
-        processed = processing.mean_experiment(*cli)
+        processed = processing.mean(*cli)
         print(":: counting longs ")
-        processed.long = processing.classify_long(processed, options.long)
+        processed.long = processing.classify_longs(processed, options.long)
         output_dataframe = processing.count_longs(processed, options.interval)
 
     basename = utils.get_firstname(csvs[0])
