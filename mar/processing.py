@@ -88,8 +88,11 @@ def merge(malloc, free, sorting_by='time'):
     return pd.concat([malloc, free]).sort_values(sorting_by)
 
 
-def remove_zeros(malloc):
-    pass
+def remove_zeros(malloc, column='req'):
+    for index in malloc.index:
+        if int(malloc.loc[index][column]) == 0:
+            malloc.drop(index)
+    return malloc
 
 
 def mean(diffs, n_experiments, long_range, by='diff'):
