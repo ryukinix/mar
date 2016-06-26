@@ -8,7 +8,7 @@
 #      @email: manoel_vilela@engineer.com
 #
 
-# thirdlib
+# third-lib
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -17,8 +17,8 @@ from tqdm import tqdm
 import mar
 
 
-def parse(csvs_groups):
-    return ((read_malloc(m), read_free(f))
+def parse(csvs_groups, nil=False):
+    return ((read_malloc(m, nil), read_free(f, nil))
             for m, f in csvs_groups)
 
 
@@ -34,31 +34,34 @@ def remove_nil(df):
     return df
 
 
-def normalize(df):
-    df = remove_nil(df)
+def normalize(df, nil=False):
+    if not nil:
+        df = remove_nil(df)
     reusage = df.groupby(level=0).cumcount()
     df.index = df.index.map(str) + reusage.map(lambda x: '-' + str(x))
     df.reset_index()
     return df
 
 
-def load_csv(csv, **kwargs):
-    return normalize(pd.read_csv(csv, **kwargs))
+def load_csv(csv, nil=False, **kwargs):
+    return normalize(pd.read_csv(csv, **kwargs), nil=nil)
 
 
-def read_malloc(csv, delimiter=';',
+def read_malloc(csv, nil=False,
+                delimiter=';',
                 columns=('req', 'time', 'op', 'memory_id'),
                 index_col=3,
                 necessary=['time']):
-    return load_csv(csv, delimiter=delimiter,
+    return load_csv(csv, nil=nil, delimiter=delimiter,
                     names=columns, index_col=index_col)[necessary]
 
 
-def read_free(csv, delimiter=' ',
+def read_free(csv, nil=False,
+              delimiter=' ',
               columns=('time', 'op', 'memory_id'),
               index_col=2,
               necessary=['time']):
-    return load_csv(csv, delimiter=delimiter,
+    return load_csv(csv, nil=nil, delimiter=delimiter,
                     names=columns, index_col=index_col)[necessary]
 
 
