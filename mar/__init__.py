@@ -8,13 +8,6 @@
 #      @email: manoel_vilela@engineer.com
 #
 
-from os import getcwd
-from mar import cli
-from mar import graph
-from mar import interval
-from mar import processing
-from mar import utils
-
 # information about the project
 __version__ = '0.5.1'
 __date__ = '2016'
@@ -29,6 +22,12 @@ __abstract__ = (
     'v{} Developed by Manoel Vilela on Federal University of Pará '
     'as Student Researcher at {}'.format(__version__, __date__))
 
+from mar import cli  # noqa
+from mar import graph  # noqa
+from mar import interval  # noqa
+from mar import processing  # noqa
+from mar import utils  # noqa
+
 __all__ = [
     'cli',
     'graph',
@@ -39,5 +38,5 @@ __all__ = [
 
 # constants
 NANOSECOND = 1e9
-CURRENT_DIRECTORY = getcwd()
 MATCHING_PATTERNS = ('free', 'malloc')
+CURRENT_DIRECTORY = utils.os.getcwd()
