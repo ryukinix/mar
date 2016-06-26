@@ -6,3 +6,13 @@
      ✔ use a custom interval @done (16-05-29 18:41)
      ✔ save the result in a on csv: interval, longs @done (16-05-29 18:41)
      ✔ plot the graphic as optional @done (16-05-29 18:41)
+
+  ✔ v0.5.1 @done (16-06-25 22:18)
+    ✔ the module mar.args was be renamed to war.cli @done (16-06-25 22:18)
+    ✔ separated individual args on new cli.py as function to plug-in.  @done (16-06-25 22:18)
+        ✔ mar.cli.minimal (csvs, interval) @done (16-06-25 22:18)
+        ✔ mar.cli.misc (verbose, ignore, ignore_first) @done (16-06-25 22:18)
+        ✔ mar.cli.graph (save_graph and show_graph) @done (16-06-25 22:18)
+        ✔ mar.cli.handler (count_clusters, long_range) @done (16-06-25 22:18)
+    ✔ put the mar.main functions about graphs on graph and mar.main.walk on mar.utils @done (16-06-25 22:18)
+    ✔ some linting fixes to keep the code more clean @done (16-06-25 22:18)

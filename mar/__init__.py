@@ -21,7 +21,7 @@ __abstract__ = (
     'do a sequence of stats processing to processing data.'
     'On the final of processing, get a summarization and put on new CSV.'
     'Beyond that,  the user can choice by CLI to save or show graphs. '
-    'v{} Developed by Manoel Vilela on Federal University of Pará'
+    'v{} Developed by Manoel Vilela on Federal University of Pará '
     'as Student Researcher at {}'.format(__version__, __date__))
 
 # constants
