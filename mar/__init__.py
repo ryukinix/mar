@@ -37,6 +37,6 @@ __all__ = [
 ]
 
 # constants
-NANOSECOND = 1e9
+NANOSECOND = 1e-9
 MATCHING_PATTERNS = ('free', 'malloc')
 CURRENT_DIRECTORY = utils.os.getcwd()

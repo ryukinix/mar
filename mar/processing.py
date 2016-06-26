@@ -116,7 +116,7 @@ def clusterize(x, linspace):
 
 
 def classify_longs(df, long_range):
-    return df['diff'].map(lambda x: x / mar.NANOSECOND in long_range)
+    return df['diff'].map(lambda x: x * mar.NANOSECOND in long_range)
 
 
 def classify_clusters(df, long_range):
