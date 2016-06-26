@@ -11,6 +11,7 @@
 
 from warnings import warn
 from mar.utils import get_name
+from decorating import animated
 
 try:
     import matplotlib
@@ -39,3 +40,18 @@ def save(df, fname, longsize, interval):
     ax = _plot(df, fname, longsize, interval)
     fig = ax.get_figure()
     fig.savefig(fname)
+
+
+def plot_save(output_dataframe, basename, options):
+    if options.show_graph:
+        if options.verbose:
+            print(":: showing graph")
+        with animated("ploting the graph"):
+            show(output_dataframe, basename, options.long, options.interval)
+    if options.save_graph:
+        figurename = basename + '.jpg'
+        save(output_dataframe, figurename, options.long, options.interval)
+        if options.verbose:
+            print(":: saved graph on: {}".format(figurename))
+    if options.verbose:
+        print(output_dataframe)

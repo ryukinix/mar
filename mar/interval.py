@@ -14,7 +14,6 @@
     Basic handler of mathematical intervals like:
     [a, b], (x, y), [c, +inf[
 
-
 """
 
 import numpy as np
@@ -38,7 +37,7 @@ class Interval(object):
            (self.interval.startswith(']'))):
             lclosed = False
         if (self.interval.endswith(')') or
-            self.interval.startswith('[')):
+           (self.interval.startswith('['))):
             rclosed = False
 
         return lclosed, rclosed

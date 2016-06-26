@@ -1,13 +1,14 @@
 # mar: Memory Analysis Report
 
-This minimal project is used to help on processing the statical analysis of the Memory Analysis Project
+## Abstract
+
 
 ## Instalation
 
 ## Subdeps
 ```
-sudo apt-get install python3-pip
-pip3 install setuptools libpng-dev libjpeg8-dev libfreetype6-dev
+sudo apt-get install python3-pip libpng-dev libjpeg8-dev libfreetype6-dev
+pip3 install setuptools 
 ``` 
 
 ## Easy Mode
@@ -59,7 +60,6 @@ optional arguments:
 ```
 
 
-
 ## Usage
 
 The usage is based on the pairs of files of tool `mar` (Memory Analysis Report):
@@ -82,8 +82,6 @@ Where lynx has that content:
 ├── lynx
 │   ├── lynx_free_1.csv
 │   ├── lynx_malloc_1.csv
-
-caso voc^tov ro
 ``` 
 
 ## License

@@ -8,11 +8,13 @@
 #      @email: manoel_vilela@engineer.com
 #
 
-
-import pandas as pd
+# thirdlib
 import numpy as np
-from mar import NANOSECOND
+import pandas as pd
 from tqdm import tqdm
+
+# self-package
+import mar
 
 
 def parse(csvs_groups):
@@ -93,7 +95,7 @@ def clusterize(x, linspace):
 
 
 def classify_long(df, long_range):
-    return df['diff'].map(lambda x: x / NANOSECOND in long_range)
+    return df['diff'].map(lambda x: x / mar.NANOSECOND in long_range)
 
 
 def classify_clusters(df, long_range):
