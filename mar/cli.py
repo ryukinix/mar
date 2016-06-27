@@ -8,6 +8,32 @@
 #      @email: manoel_vilela@engineer.com
 #
 
+"""
+    Handle all the Command Line Interface
+
+    We have three principal modules:
+
+    * mar.cli.minimal:
+        csvs (positional)
+        --interval
+        --target
+
+    * mar.cli.misc:
+        --verbose
+        --ignore
+        --ignore-first
+        --version
+
+    * mar.cli.graph:
+        --show-graph
+        --save-graph
+
+    * mar.cli.handler:
+        --count-clusters
+        --long-range
+
+"""
+
 
 from argparse import ArgumentParser
 from mar.interval import Interval
@@ -23,7 +49,7 @@ def minimal():
     parser.add_argument(
         '-t', '--target',
         dest='target',
-        default='memory-analysis-report',
+        default='.',
         help="The path (can be a folder name or path) to save the output"
     )
 

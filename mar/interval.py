@@ -14,12 +14,23 @@
     Basic handler of mathematical intervals like:
     [a, b], (x, y), [c, +inf[
 
+    * mar.interval.Interval
+
 """
 
 import numpy as np
 
 
 class Interval(object):
+
+    """A class of formal mathematical Interval
+
+    You can pass things like:
+        * (str) mar.interval.Interval('(1, 2)')
+        * (str) mar.interval.Interval(']1, 2[')
+        * (tuple) mar.interval.Interval((1, 2))
+        * (list) mar.interval.Interval([1, 2])
+    """
 
     def __init__(self, interval):
         self.interval = str(interval).strip()
@@ -32,6 +43,7 @@ class Interval(object):
                                                    id=hex(id(self)))
 
     def infer_range(self):
+        """Get the real range based on the self.interval"""
         lclosed, rclosed = True, True
         if (self.interval.startswith('(') or
            (self.interval.startswith(']'))):
@@ -46,6 +58,7 @@ class Interval(object):
         return self.interval
 
     def parse(self, interval):
+        """Parse the interval to pair number and return a tuple"""
         return list(map(np.float,
                         interval.strip('[]()').split(',')))
 

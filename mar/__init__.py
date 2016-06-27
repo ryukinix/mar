@@ -9,7 +9,7 @@
 #
 
 # information about the project
-__version__ = '0.5.2'
+__version__ = '0.6.0'
 __date__ = '2016'
 __author__ = 'Manoel Vilela'
 __email__ = 'manoel_vilela@engineer.com'

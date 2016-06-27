@@ -8,6 +8,17 @@
 #      @email: manoel_vilela@engineer.com
 #
 
+"""
+    MAR module whose is designed to handle plot show writing in the window
+    using some graphic server, wheren is used matplotlib behind the scenes.
+
+    Functions:
+    * mar.graph.show
+    * mar.graph.save
+    * mar.graph_plot_csv
+
+"""
+
 
 from warnings import warn
 from mar.utils import get_name
