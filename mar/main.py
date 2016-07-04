@@ -46,19 +46,19 @@ def run():
 
     if options.count_clusters:  # clustering
         print(":: load csv -> differentiating -> count short/mid/long")
-        output_dataframe = processing.count.clusters(diffs, 
-                                                     total=len(groups),
-                                                     long_range=options.long)
+        df = processing.count.clusters(diffs,
+                                       total=len(groups),
+                                       groups=options.long.groups)
     else:  # just getting the longs
-        print(":: load csv -> differentiating -> mean -> tagging longs")
+        print(":: load csv -> differentiating -> merge -> mean -> tag longs")
         processed = processing.actions.mean(diffs, total=len(groups))
         print(":: counting longs ")
         processed.long = processing.classify.longs(processed, options.long)
-        output_dataframe = processing.count.longs(processed, options.interval)
+        df = processing.count.longs(processed, options.interval)
 
     basename = utils.get_firstname(csvs[0], 'report')
-    graph.plot_save(output_dataframe, basename, options)
-    processing.io.save(output_dataframe, basename, options.verbose)
+    graph.plot_save(df, basename, options)
+    processing.io.save(df, basename, options.verbose)
 
 if __name__ == '__main__':
     run()

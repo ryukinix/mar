@@ -19,27 +19,20 @@
     * mar.processing.classify.longs
 """
 
-# third-lib
-import numpy as np
-
 # self-package
 import mar
 
 
-def clusters(df, long_range):
-    lp = np.linspace(long_range.left, long_range.right, num=3)
-    return df['diff'].map(lambda x: tag(x, lp))
+def tag(diff, groups):
+    items = sorted(groups.items(),
+                   key=lambda x: x[1].left)
+    diff = diff * mar.NANOSECOND  # cast to seconds
+    for label, interval in items:
+        if diff in interval:
+            # print('{diff} -> {label}'.format_map(locals()))
+            return label
 
-
-def tag(x, linspace):
-    if x >= linspace[2]:
-        return 'long'
-    elif x >= linspace[1]:
-        return 'medium'
-    elif x > linspace[0]:
-        return 'short'
-    else:
-        return 'undefined'
+    return 'undefined'
 
 
 def longs(df, long_range):
