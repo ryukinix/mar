@@ -23,9 +23,13 @@ import pandas as pd
 from tqdm import tqdm
 
 
+def alloc_sync(malloc, free):
+    """sync just mallocs whose has free"""
+    return malloc[~free.isin(malloc)].dropna()
+
+
 def diff(malloc, free, by='time'):
-    # sync just mallocs whose has free
-    malloc = malloc[~free.isin(malloc)].dropna()
+    malloc = alloc_sync(malloc, free)
     free['type'] = 'free'
     malloc['type'] = 'malloc'
     diff = free[by] - malloc[by]
@@ -36,7 +40,7 @@ def diff(malloc, free, by='time'):
 
 
 def merge(malloc, free):
-    malloc = malloc[~free.isin(malloc)].dropna()
+    malloc = alloc_sync(malloc, free)
     free['type'] = 'free'
     malloc['type'] = 'malloc'
     return pd.concat([malloc, free])
