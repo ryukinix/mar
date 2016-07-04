@@ -36,6 +36,7 @@ class Interval(object):
         self.interval = str(interval).strip()
         self.left, self.right = self.parse(self.interval)
         self.lclosed, self.rclosed = self.infer_range()
+        self.clusters = []
 
     def __repr__(self):
         return '<{cls} {interval} at {id}>'.format(cls=self.__name__(),
@@ -46,10 +47,10 @@ class Interval(object):
         """Get the real range based on the self.interval"""
         lclosed, rclosed = True, True
         if (self.interval.startswith('(') or
-           (self.interval.startswith(']'))):
+            self.interval.startswith(']')):
             lclosed = False
         if (self.interval.endswith(')') or
-           (self.interval.startswith('['))):
+            self.interval.startswith('[')):
             rclosed = False
 
         return lclosed, rclosed
@@ -57,10 +58,8 @@ class Interval(object):
     def __str__(self):
         return self.interval
 
-    def parse(self, interval):
-        """Parse the interval to pair number and return a tuple"""
-        return list(map(np.float,
-                        interval.strip('[]()').split(',')))
+    def __abs__(self):
+        return self.left - self.right
 
     def __contains__(self, element):
         return (((self.rclosed and self >= element) or
@@ -83,3 +82,24 @@ class Interval(object):
     @classmethod
     def __name__(cls):
         return cls.__name__
+
+    def parse(self, interval):
+        """Parse the interval to pair number and return a tuple"""
+        return list(map(np.float,
+                        interval.strip('[]()').split(',')))
+
+    @classmethod
+    def build_groups(cls):
+        # TODO: make this scalable and flexible about
+        # how clusters and how clusterize
+        return dict(short=cls('(0, 0.1)'),
+                    medium=cls('[0.1, 1]'),
+                    long=cls('(1, +inf)'),
+                    undefined=cls('(inf, inf)'))
+
+    @property
+    def groups(self):
+        if not self.clusters:
+            self.clusters = self.build_groups()
+
+        return self.clusters
