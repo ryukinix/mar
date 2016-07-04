@@ -38,19 +38,18 @@ def longs(df, interval):
                                        for x in range(len(distribution))]))
 
 
-def clusters(diffs, total, long_range):
-    table = dict(short=[],
-                 medium=[],
-                 long=[],
-                 undefined=[])
+def clusters(dfs, total, groups):
+    table = {x: [] for x in groups.keys()}
 
-    for diff in tqdm(diffs, total=total):
-        stats = dict(short=0,
-                     medium=0,
-                     long=0,
-                     undefined=0)
-        diff.label = mar.processing.classify.clusters(diff, long_range)
-        for label in tqdm(diff.label):
+    for df in tqdm(dfs, total=total):
+        # that query is necessary because mar.processing.actions.diff
+        # concat malloc & free operations,
+        # whose we will has double entries for counting
+        df = df.query("type == 'malloc'")
+        stats = {x: 0 for x in groups.keys()}
+        df['label'] = df['diff'].map(
+            lambda x: mar.processing.classify.tag(x, groups))
+        for label in df.label:
             stats[label] += 1
 
         for k, v in stats.items():
